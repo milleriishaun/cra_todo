@@ -4,5 +4,6 @@
         "titleBar.activeBackground": "#334520",
         "titleBar.activeForeground": "#F8FBF6"
     },
-    "editor.tabSize": 2
+    "editor.tabSize": 2,
+    "powermode.enabled": true
 }

@@ -1,14 +1,18 @@
-import Footer from './components/Footer';
-import Header from './components/Header';
-import MainContent from './components/MainContent';
+import './index.css';
+
+import JokeCard from './components/JokeCard';
+import Product from './components/Product';
 import React from 'react';
+import jokesData from './jokesData';
+import productData from './products';
 
 function App() {
+
+  const productComponents = productData.map(p => <Product key={p.id} product={p} />);
+
   return (
     <div>
-      <Header />
-      <MainContent />
-      <Footer />
+      {productComponents}
     </div>
   )
 }

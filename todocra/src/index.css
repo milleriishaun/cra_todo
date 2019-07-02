@@ -1,5 +1,6 @@
 body {
   margin: 0;
+  margin-left: 20px;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
@@ -14,4 +15,76 @@ code {
 
 .navbar {
   background-color: greenyellow;
+}
+
+.todo-list {
+  background-color: white;
+  margin: auto;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #efefef;
+  box-shadow:
+    /* Top layer shadow */
+    0 1px 1px rgba(0,0,0,0.15),
+    /* Second layer */
+    0 10px 0 -5px #eee,
+    /* Second Layer shadow */
+    0 10px 1px -4px rgba(0,0,0,0.15),
+    /* Third Layer */
+    0 20px 0 -10px #eee,
+    /* Third Layer shadow */
+    0 20px 1px -9px rgba(0,0,0,0.15);
+  padding: 30px;
+}
+
+.todo-item {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 30px 20px 0;
+  width: 70%;
+  border-bottom: 1px solid #cecece;
+  font-family: Roboto, sans-serif;
+  font-weight: 100;
+  font-size: 15px;
+  color: #311111;
+}
+
+.input[type=checkbox] {
+  margin-right: 10px;
+}
+
+img {
+  width: auto;
+  height: auto;
+  max-width: 400px;
+  max-height: 400px;
+}
+
+.content-card {
+  margin-bottom: 100px;
+}
+
+.joke-card {
+  font-family: comic sans;
+  font-size: 16px;
+  color: greenyellow;
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid blue;
+}
+
+.item {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(129, 122, 228);
+  font-family: Helvetica;
+  font-size: 16px;
+  border: 1px solid #111111;
+  margin-bottom: 50px;
+  padding: 0px;
 }
