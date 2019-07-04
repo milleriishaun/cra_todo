@@ -15,9 +15,26 @@ class App extends Component{
     this.state = {
       firstName: "",
       lastName: "",
-      age: 18,
+      age: "",
       gender: "",
       location: "california",
+      dietaryRestrictions: [
+        {
+          id: 1,
+          name: "no nuts",
+          status: false,
+        },
+        {
+          id: 2,
+          name: "non-dairy",
+          status: false,
+        },
+        {
+          id: 3,
+          name: "other",
+          status: false,
+        }
+      ],
       submitted: false
     }
     this.handleChange = this.handleChange.bind(this);
@@ -29,11 +46,26 @@ class App extends Component{
     // this.handleChange = this.handleChange.bind(this);
   }
 
-  handleChange(e) {
-    const {name, value} = e.target;
-    this.setState({
-      [name]: value
-    });
+  handleChange(e, id) {
+    const {name, value, type, checked} = e.target;
+    if (type === "checkbox"){
+      this.setState((prevState) => {
+        const newDiet = prevState.dietaryRestrictions.map(item => {
+          if (item.id === id) {
+            item.status = !item.status;
+          }
+          return item;
+        })
+        // console.log("changed ", newDiet);
+        return {
+          [name]: newDiet
+        };
+      })
+    } else {
+      this.setState({
+        [name]: value
+      });
+    }
   }
 
   handleSubmit(e){
@@ -128,7 +160,15 @@ class App extends Component{
     //     <p key={index}>{item}</p>
     //   )
     // });
-    const {firstName, lastName, age, gender, location, submitted} = this.state;
+    const {firstName, lastName, age, gender, location, dietaryRestrictions, submitted} = this.state;
+    const dietList = dietaryRestrictions.map(item => {
+      let currentItem;
+      if (item.status) {
+        currentItem = <h5 key={item.id}>- {item.name}</h5>
+      }
+      return currentItem;
+    });
+
     const summaryText = (
       <h3>You prefer to be addressed as
         {gender === "male" ? " " + "Mr. "
@@ -138,9 +178,30 @@ class App extends Component{
           ? " " + "Cis. "
           : null}
           {firstName ? firstName : null} {lastName ? lastName : null}
-      <br />and you are a {age} year old {gender} from {" " + location}!
+        <br />and you are a {age} year old {gender} from {" " + location}!
+        <br />
+        <br />
+        Your dietary restrictions include the following:
+        {dietList}
       </h3>
     );
+
+    const diets = dietaryRestrictions.map(item => {
+      return (
+        <label>
+          <input
+            key={item.id}
+            type="checkbox"
+            name="dietaryRestrictions"
+            value={item.name}
+            checked={item.status}
+            onChange={(e) => this.handleChange(e, item.id)}
+          />
+          {item.name}
+          <br />
+        </label>
+      )
+    });
 
     return (
       <main>
@@ -217,6 +278,9 @@ class App extends Component{
             <option value="Tennessee">Tennessee</option>
             <option value="California">California</option>
           </select>
+
+          <h3>Dietary Restrictions: </h3>
+          {diets}
 
           <h1>Live Summary: </h1>
           {submitted && summaryText}
