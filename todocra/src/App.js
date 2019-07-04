@@ -4,6 +4,7 @@ import React, {Component} from 'react';
 
 import Conditional from './components/Conditional';
 import TodoItem from './components/TodoItem';
+import { bindExpression } from '@babel/types';
 import todoData from './todoData';
 
 class App extends Component{
@@ -14,16 +15,32 @@ class App extends Component{
     this.state = {
       firstName: "",
       lastName: "",
-      isFriendly: true,
+      age: 18,
       gender: "",
-      favColor: "blue",
+      location: "california",
       submitted: false
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    // this.handleChange = this.handleChange.bind(this);
+    // this.handleSubmit = this.handleSubmit.bind(this);
     // loading: false,
     // character: {}
     // this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(e) {
+    const {name, value} = e.target;
+    this.setState({
+      [name]: value
+    });
+  }
+
+  handleSubmit(e){
+    e.preventDefault();
+    this.setState({
+      submitted: !this.state.submitted
+    })
   }
 
   // componentDidMount() {
@@ -103,24 +120,6 @@ class App extends Component{
   //     });
   //   };
 
-  handleChange(e){
-    const {name, value, type, checked} = e.target;
-    type === "checkbox" ? this.setState({
-      [name]: checked
-    })
-    : this.setState({
-      [name]: value
-      // lastName: e.target.value
-    });
-  }
-
-  handleSubmit(e){
-    e.preventDefault();
-    this.setState({
-      submitted: !this.state.submitted
-    });
-  }
-
   render(){
 
     // const todoComponents = this.state.todos.map(item => <TodoItem key={item.id} item={item} handleChange={this.handleChange} />)
@@ -129,27 +128,23 @@ class App extends Component{
     //     <p key={index}>{item}</p>
     //   )
     // });
+    const {firstName, lastName, age, gender, location, submitted} = this.state;
+    const summaryText = (
+      <h3>You prefer to be addressed as
+        {gender === "male" ? " " + "Mr. "
+          : gender === "female"
+          ? " " + "Ms. "
+          : gender === "trans"
+          ? " " + "Cis. "
+          : null}
+          {firstName ? firstName : null} {lastName ? lastName : null}
+      <br />and you are a {age} year old {gender} from {" " + location}!
+      </h3>
+    );
 
     return (
-      <form onSubmit={this.handleSubmit}>
-        <input
-          type="text"
-          value={this.state.firstName}
-          name="firstName"
-          placeholder="First Name"
-          onChange={this.handleChange}
-        />
-        <br />
-        <input
-          type="text"
-          value={this.state.lastName}
-          name="lastName"
-          placeholder="Last Name"
-          onChange={this.handleChange}
-        />
-        <h1>{this.state.firstName} {this.state.lastName}</h1>
+      <main>
         {/* // <div className="todo-list"> */}
-
         {/* {this.state.loading ? "Loading..." : this.state.character.name} */}
         {/* {todoComponents} */}
         {/* <Conditional isLoading={this.state.isLoading} /> */}
@@ -157,56 +152,77 @@ class App extends Component{
         {/* {this.state.unreadMessages.length > 0 && <h1>You have {this.state.unreadMessages.length} unread messages!</h1>}
         {this.state.unreadMessages.length > 0 && msgList} */}
         {/* // </div> */}
-        <textarea
-          value={"Some default value"}
-          onChange={this.handleChange}
-        />
-        <br />
-        <label>
+        <form onSubmit={this.handleSubmit}>
+          <h3>Personal Information: </h3>
           <input
-            type="checkbox"
-            name="isFriendly"
-            checked={this.state.isFriendly}
+            name="firstName"
+            value={firstName}
+            placeholder="First Name"
             onChange={this.handleChange}
-          /> Is friendly?
-        </label>
-        <br />
-        <label>
+          /><br />
           <input
-            type="radio"
-            name="gender"
-            value="male"
-            checked={this.state.gender === "male"}
+            name="lastName"
+            value={lastName}
+            placeholder="Last Name"
             onChange={this.handleChange}
-          /> Male
-        </label>
-        <br />
-        <label>
+          /><br />
           <input
-            type="radio"
-            name="gender"
-            value="female"
-            checked={this.state.gender === "female"}
+            name="age"
+            value={age}
+            placeholder="Age"
             onChange={this.handleChange}
-          /> Female
-        </label>
-        <br />
-        <label>Favorite color: </label>
-        <select
-          value={this.state.favColor}
-          onChange={this.handleChange}
-          name="favColor"
-        >
-          <option value="brown">Brown</option>
-          <option value="blue">Blue</option>
-          <option value="black">Black</option>
-        </select>
-        <h2>Your favorite color is {this.state.favColor}</h2>
-        {this.state.gender && <h2>You are a {this.state.gender}</h2>}
-        <br />
-        <p>Submitted: {this.state.submitted ? "Yes" : "Not Yet"}</p>
-        <button>Submit</button>
-      </form>
+          /><br />
+
+          <br />
+          <h3>Gender: </h3>
+          <label>
+            <input
+              type="radio"
+              name="gender"
+              value="male"
+              checked={gender === "male"}
+              onChange={this.handleChange}
+            />
+          Male</label>
+          <br />
+          <label>
+            <input
+              type="radio"
+              name="gender"
+              value="female"
+              checked={gender === "female"}
+              onChange={this.handleChange}
+            />
+          Female</label>
+          <br />
+          <label>
+            <input
+              type="radio"
+              name="gender"
+              value="trans"
+              checked={gender === "trans"}
+              onChange={this.handleChange}
+            />
+          Trans</label>
+          <br />
+          <br />
+          <h3>Location: </h3>
+          <select
+            name="location"
+            value={location}
+            onChange={this.handleChange}
+          >
+            <option value="Iowa">Iowa</option>
+            <option value="Wyoming">Wyoming</option>
+            <option value="Tennessee">Tennessee</option>
+            <option value="California">California</option>
+          </select>
+
+          <h1>Live Summary: </h1>
+          {submitted && summaryText}
+          <button>Submit</button>
+        </form>
+      </main>
     )
   }
 }
