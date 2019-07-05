@@ -35,6 +35,7 @@ class App extends Component{
           status: false,
         }
       ],
+      otherDiet: "",
       submitted: false
     }
     this.handleChange = this.handleChange.bind(this);
@@ -160,14 +161,15 @@ class App extends Component{
     //     <p key={index}>{item}</p>
     //   )
     // });
-    const {firstName, lastName, age, gender, location, dietaryRestrictions, submitted} = this.state;
+    const {firstName, lastName, age, gender, location, dietaryRestrictions, otherDiet, submitted} = this.state;
     const dietList = dietaryRestrictions.map(item => {
       let currentItem;
       if (item.status) {
-        currentItem = <h5 key={item.id}>- {item.name}</h5>
+        currentItem = <h5 style={{margin: "0px"}}key={item.id}>- {item.name}</h5>
       }
       return currentItem;
     });
+    const otherDietItem = <h5 style={{margin: "0px"}}><span style={{color: "#ffffff"}}>blank</span>- {otherDiet}</h5>;
 
     const summaryText = (
       <h3>You prefer to be addressed as
@@ -183,24 +185,48 @@ class App extends Component{
         <br />
         Your dietary restrictions include the following:
         {dietList}
+        {otherDietItem}
       </h3>
     );
 
     const diets = dietaryRestrictions.map(item => {
-      return (
-        <label>
-          <input
-            key={item.id}
-            type="checkbox"
-            name="dietaryRestrictions"
-            value={item.name}
-            checked={item.status}
-            onChange={(e) => this.handleChange(e, item.id)}
-          />
-          {item.name}
-          <br />
-        </label>
-      )
+      if (item.name === "other" && item.status === true) {
+        return (
+          <label>
+            <input
+              key={item.id}
+              type="checkbox"
+              name="dietaryRestrictions"
+              value={item.name}
+              checked={item.status}
+              onChange={(e) => this.handleChange(e, item.id)}
+            />
+            {item.name}
+            <br />
+            <input
+              name="otherDiet"
+              value={otherDiet}
+              placeholder="list your diet restrictions"
+              onChange={this.handleChange}
+            />
+          </label>
+        )
+      } else {
+        return (
+          <label>
+            <input
+              key={item.id}
+              type="checkbox"
+              name="dietaryRestrictions"
+              value={item.name}
+              checked={item.status}
+              onChange={(e) => this.handleChange(e, item.id)}
+            />
+            {item.name}
+            <br />
+          </label>
+        )
+      }
     });
 
     return (
